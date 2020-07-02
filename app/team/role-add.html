@@ -1,0 +1,31 @@
+<div class="tab">
+	<h2 class="pull-left">หน้าที่</h2>
+	<div class="pull-right">
+		<a class="btn btn-link" ng-href="#/add">ออก <span class="glyphicon glyphicon-arrow-right"></span></a>
+	</div>
+</div>
+<br><br>
+<fieldset ng-disabled="show">
+<form name="addForm" class="row" ng-submit="new.processForm()">	
+	<div class="col-sm-6 col-sm-offset-3">
+		<div id="alert" class="alert" ng-class="{'alert-success':success, 'alert-danger':!success}" ng-show="show">{{message}}</div>
+		<div id="inp-team" class="form-group" ng-hide="new.add=='holiday'" ng-class="{'has-error':new.teamError}">
+			<label>ทีมงาน</label>
+			<select name="team" ng-model="new.formData.team" class="form-control">
+				<optgroup label="{{team.name.en}}" ng-repeat="team in dataTeam">
+					<option ng-repeat="m in team.emp | filter:{disable:'N'}" ng-value="{{m.id}}">{{m.nick+' '+m.name}}</option>
+				</optgroup>
+			</select>
+			<span ng-show="new.teamError" class="help-block">** เลือกทีมงาน</span>
+		</div>
+		<div class="form-group" ng-class="{'has-error':addForm.detail.$invalid && !addForm.detail.$pristine }">
+			<label>รายละเอียด</label>
+			<textarea id="inp-detail" ng-model="new.formData.detail" name="detail" class="form-control bd-fade" placeholder="..." required></textarea>
+			<span class="help-block" ng-show="addForm.detail.$invalid && !addForm.detail.$pristine">กรุณากรอกรายละเอียด!!</span>
+		</div>
+		<div class="clearfix"></div>		
+		<button type="submit" ng-disabled="addForm.$invalid" class="btn btn-block btn-lg btn-main">บันทึกข้อมูล</button>
+	</div>
+</form>
+</fieldset>
+<br><br><br><br>

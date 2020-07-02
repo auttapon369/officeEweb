@@ -1,0 +1,97 @@
+<div class="tab">
+	<h2 class="text-main pull-left">โครงการ</h2>
+</div>
+
+<!-- table -->
+<div class="panel">
+	<div class="panel-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="text-right">#</th>
+					<th class="text-center hidden-xs">รหัส</th>
+					<th>โครงการ</th>
+					<th class="hidden-xs">ลูกค้า</th>
+					<th class="hidden-xs">สถานะ</th>
+					<th class="text-center">เว็บ</th>
+					<th ng-show="grant.pro" class="text-center">แก้ไข</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(key,item) in dataProject | filter : pro.filters">
+					<td class="text-right">{{ key+1 }}</td>
+					<td class="text-center hidden-xs">{{ item.code }}</td>
+					<td>{{ item.shortname }}</td>
+					<td class="hidden-xs">{{ item.customer }}</td>
+					<td class="hidden-xs">{{ item.status }}</td>
+					<td class="text-center"><a href="http://{{ item.link }}" target="_blank" ng-show="{{item.link != ''}}"><span class="glyphicon glyphicon-globe"></span></a></td>
+					<td ng-show="grant.pro" class="text-center"><a data-toggle="modal" data-target="#editForm" ng-click="pro.viewData(key)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- edit -->
+<div id="editForm" class="modal fade" role="dialog" aria-labelledby="e-title">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+		
+		<fieldset ng-disabled="show">
+    	<form name="editForm">
+
+      		<div class="modal-header bg-fade">
+        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" id="e-title">แก้ไขข้อมูลโครงการ</h4>
+      		</div>
+      		<div class="modal-body">
+          		<div class="form-group row" ng-class="{ 'has-error' : editForm.nick.$invalid && !editForm.nick.$pristine }">
+          			<div class="col-xs-8">
+            			<label class="control-label">โครงการ</label>
+            			<input type="text" class="form-control" name="nick" maxlength="50" ng-model="pro.formData.shortname" required />
+            			<span class="help-block" ng-show="addForm.nick.$invalid && !addForm.nick.$pristine">กรุณาใส่ชื่อโครงการ</span>
+            		</div>
+          			<div class="col-xs-4">
+            			<label class="control-label">รหัส</label>
+            			<input type="text" class="form-control" name="code" min="0" max="9999" maxlength="4" ng-model="pro.formData.code" />
+            		</div>
+          		</div>	        		
+          		<div class="form-group">
+					<label class="control-label">ชื่อ <span class="text-fade">(เป็นทางการ)</span></label>
+            		<input type="text" class="form-control" name="name" maxlength="100" ng-model="pro.formData.fullname" ng-value="{{edit.fullname}}" />
+          		</div>
+				<div class="form-group">
+					<label class="control-label">เชื่อมโยงเว็บไซต์</span></label>
+            		<input type="text" class="form-control" ng-model="pro.formData.link" ng-value="{{}}" />
+          		</div>
+				<div class="form-group">
+					<label>ลูกค้า</label>
+					<select ng-model="pro.formData.customer" class="form-control">
+						<option ng-selected="pro.formData.customer==cus.abb" ng-repeat="cus in dataCustomer" value="{{cus.abb}}">{{cus.abb+' '+cus.th}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>สถานะ</label><br>
+					<label class="radio-inline" ng-repeat="st in dataProjectStatus">
+			        	<input type="radio" name="status" ng-model="pro.formData.status" ng-value="st.en">{{st.en}}
+					</label>
+				</div>
+      		</div>
+			<div class="modal-footer">
+				
+				<!-- alert -->
+				<div class="pull-left" ng-class="{'text-danger':!success}" ng-show="show">
+					<img src="lib/img/loader.gif" />
+					<small >{{ message }}</small>
+				</div>
+
+				<button type="button" class="btn btn-sub" ng-click="pro.resetForm()">คืนค่า</button>
+				<button type="submit" class="btn btn-main" ng-click="pro.editForm()" ng-disabled="editForm.$invalid">แก้ไขและบันทึก</button>
+			</div>
+
+		</form>
+		</fieldset>
+
+    	</div>
+  	</div>
+</div>

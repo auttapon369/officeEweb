@@ -1,0 +1,32 @@
+<div class="tab">
+	<h2 class="text-main pull-left">งาน {{recent}}</h2>
+	<div class="btn-group pull-right">
+		<button type="button" class="btn btn-link">{{recent}}</button>
+		<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+		<ul class="dropdown-menu">
+			<li class="text-center" ng-repeat="v in years"><a ng-click="changeYear(v.year,'reminder')">งาน {{ v.year }}</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4" ng-repeat="t in rmd.proType">
+		
+		<div class="panel">
+
+			<div class="panel-body">
+				<h3>{{ t }}</h3>
+				<ul class="list-unstyled">
+					<li ng-repeat="item in rmd.data | filter : t" ng-show="item.task.total > 0">
+						<a href="#/reminder/{{recent+'/tag/'+convURL(item.shortname)}}" class="a-under">
+							{{item.shortname}} 
+							<span class="pull-right" ng-show="item.task.remain > 0">{{item.task.remain}}</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+</div>

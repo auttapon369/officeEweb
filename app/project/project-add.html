@@ -1,0 +1,43 @@
+<div class="tab">
+	<h2 class="pull-left">เปิดโครงการใหม่</h2>
+	<div class="pull-right">
+		<a class="btn btn-link" ng-href="#/project">ออก <span class="glyphicon glyphicon-arrow-right"></span></a>
+	</div>
+</div>
+
+<br><br>
+
+<fieldset ng-disabled="show">
+<form name="addForm" class="row" ng-submit="proAdd.addForm()">
+	<div class="col-sm-6 col-sm-offset-3">
+		
+		<div id="alert" class="alert" ng-class="{'alert-success': success, 'alert-danger': !success}" ng-show="show">
+			<span>{{ message }}</span>
+		</div>
+
+		<div class="form-group" ng-class="{ 'has-error' : addForm.nick.$invalid && !addForm.nick.$pristine }">
+			<label for="inp-detail">ชื่อย่อ </label>
+			<input type="text" ng-model="proAdd.formData.nick" name="nick" class="form-control" placeholder="...." aria-describedby="help-nick" required />
+			<span class="help-block" ng-show="addForm.nick.$invalid && !addForm.nick.$pristine">กรุณาใส่ชื่อโครงการ</span><span id="help-nick" class="help-block small text-fade">** สงคราม</span>
+		</div>
+		<div class="form-group">
+			<label for="inp-detail">ชื่อทางการ <span class="text-fade">(ถ้ามี)</span></label>
+			<input type="text" ng-model="proAdd.formData.name" name="name" class="form-control" placeholder="...." aria-describedby="help-name" />
+			<span id="help-name" class="help-block small text-fade">** โทรมาตรลุ่มน้ำสงคราม</span>
+		</div>
+		<div class="form-group">
+			<label for="inp-detail">ลูกค้า</label>
+			<select ng-model="proAdd.formData.cus" class="form-control" required>
+				<option ng-repeat="cus in dataCustomer" value="{{cus.id}}">{{cus.abb+' '+cus.th}}</option>
+			</select>
+		</div>
+
+		<div class="clearfix"></div>
+
+		<button type="submit" ng-disabled="addForm.$invalid" class="btn btn-block btn-lg btn-main">+ เพิ่มข้อมูล</button>
+
+	</div>
+</form>
+</fieldset>
+
+<br><br><br><br>

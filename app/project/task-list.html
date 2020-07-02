@@ -1,0 +1,150 @@
+<div class="tab">
+	<h2 class="pull-left text-main">{{ task.title }}</h2>
+	<div class="pull-right">
+		<a href="#/reminder/{{recent}}" class="btn btn-link"><small class="hidden-xs">ดูโครงการอื่น</small> <span class="glyphicon glyphicon-arrow-up"></span></a>
+	</div>
+</div>
+
+<div id="task">
+
+	<div class="alert alert-info" ng-show="data[0].task.remain==0 && select(false)">ไม่มีงานที่ต้องทำในขณะนี้ ^____^</div>
+	<div class="alert alert-danger" ng-show="data==''">พบข้อผิดพลาดจากการใช้งานของคุณ</div>
+
+	<div class="panel p{{ item.id }}" title="{{ item.id }}" ng-repeat="item in data[0].task.list | filter : task.ftDefault">
+	  		  	
+	  	<div class="panel-body">
+
+			<!-- text -->
+			<h4 ng-bind-html="item.detail | unsafe"></h4>
+			
+			<!-- comment -->
+			<ul class="comment list-unstyled small">
+				<li ng-repeat="cm in item.comment"><strong>@{{ cm.nick }}</strong> {{ cm.text }}</li>
+			</ul>
+
+			<!-- timeline -->
+			<ul class="timeline list-inline">
+				<li>
+					<span class="glyphicon glyphicon-ok-circle text-sub tl-1" title="{{ item.create }}"></span>
+				</li>
+				<li ng-class="{'bd-main':item.status.over=='true', 'bd-sub':(item.status.clear=='true' && item.status.over=='false') || (actClear[item.id] && item.status.over=='false')}">
+					<span ng-show="item.status.clear=='false'&&item.status.approve=='false'&&item.status.over=='false'" class="glyphicon glyphicon-record text-fade tl-2" title="{{ item.plan }}"></span>
+					<span ng-show="item.status.over=='true'" class="glyphicon glyphicon-record text-danger tl-2" title="{{ item.plan }}"></span>
+					<span ng-show="(item.status.clear=='true'&&item.status.over=='false') || (actClear[item.id] && item.status.over=='false')" class="glyphicon glyphicon-ok-circle text-sub tl-2" title="{{ item.plan }}"></span>
+					<!--<small>{{ item.plan }}</small>-->
+				</li>
+				<li ng-class="{ 'bd-sub': item.status.clear=='true' || actClear[item.id] }">
+					<span ng-show="item.status.clear=='false' || actClear[item.id]" class="glyphicon glyphicon-record text-fade tl-3 rec-clear" title="{{ item.clear }}"></span>
+					<span ng-show="item.status.clear=='true' || actClear[item.id]" class="glyphicon glyphicon-ok-circle text-sub tl-3 ok-clear" title="{{ item.clear }}"></span>
+				</li>
+				<li ng-class="{ 'bd-sub': item.status.approve=='true' || actApprove[item.id] }">
+					<span ng-show="item.status.approve=='false' || actApprove[item.id]" class="glyphicon glyphicon-record text-fade tl-4 rec-approve" title="{{ item.approve }}"></span>
+					<span ng-show="item.status.approve=='true' || actApprove[item.id]" class="glyphicon glyphicon-ok-circle text-sub tl-4 ok-approve" title="{{ item.approve }}"></span>
+				</li>
+			</ul>
+
+		</div>
+
+		<!-- comment -->
+		<div class="box-hidden bg-gray sd-inset" ng-show="actComment||item.status.approve=='true' && item.comment.length>0">
+
+			<!--<ul class="comment list-unstyled small">
+				<li ng-repeat="cm in item.comment">@{{ cm.nick }} - {{ cm.text }}</li>
+			</ul>-->
+
+			<form name="cmForm" class="form-comment" ng-submit="commentForm(item.id)" ng-show="actComment" ng-hide="item.status.approve=='true'">
+				<input type="text" ng-model="formData.comm[item.id]" name="comm[]" class="input-sm form-control" placeholder="แสดงความคิดเห็นที่นี่" required />
+				<button type="submit" name="submit" ng-disabled="cmForm.$invalid" class="btn btn-sm btn-main">ตอบ</button>
+			</form>
+
+		</div>
+
+		<div class="panel-footer">
+
+			<!-- tag -->
+			<ul class="list-inline small">
+				
+				<li ng-show="item.ref!=''"><strong>by:</strong> {{item.ref}}</li>
+				<li ng-show="item.during"><strong>timeline:</strong> {{item.during}}วัน</li>
+
+				<li>
+					<strong>tag:</strong> 
+					<a ng-repeat="tag in item.tag" href="#/reminder/{{recent+'/tag/'+convURL(tag.name)}}" class="a-tag">#{{ tag.name }}</a>
+				</li>
+			</ul>
+
+			<!-- button -->
+			<div class="option" ng-show="item.status.approve=='false'">
+			  	<button type="button" title="แสดงความคิดเห็น" class="btn btn-link" ng-class="{ active : actComment }" ng-click="actComment=!actComment">
+			  		<span class="glyphicon glyphicon-comment"></span>
+			  		<!--<small ng-show="item.comment.length>0">{{ item.comment.length }}</small>-->
+			  	</button>
+				<!--
+				<button type="button" class="btn btn-link" ng-click="actTime=!actTime"><span class="glyphicon glyphicon-time"></button>
+				<button ng-show="item.attach!=''" type="button" class="btn btn-black"><span class="glyphicon glyphicon-paperclip"></button>
+				-->
+				<button type="submit" title="ส่งงาน" class="btn btn-link" ng-hide="item.status.clear=='true' || actClear[item.id]" ng-click="taskForm(item.id, 'clear', item.tag)"><span class="glyphicon glyphicon-ok"></button>
+			  	<button type="submit" title="จบงาน" class="btn btn-link" ng-show="item.status.clear=='true' || actClear[item.id]" ng-class="{'disabled':actApprove[item.id]}" ng-click="taskForm(item.id, 'approve', item.tag)"><span class="glyphicon glyphicon-thumbs-up"></button>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<p class="text-center" ng-show="data[0].task.total">
+		<a class="small" ng-click="taskRecent=true" ng-hide="taskRecent">ดูงานที่ผ่านมา<br><span class="glyphicon glyphicon-menu-down"></span></a>
+	</p>
+
+	<div class="panel bd-sub" ng-repeat="item in data[0].task.list | filter:task.ftRecent" ng-show="taskRecent">
+	  	<div class="panel-body">
+
+			<!-- text -->
+			<h4 ng-bind-html="item.detail | unsafe"></h4>
+			
+			<!-- during -->
+			<small ng-show="item.during>0"><strong>ใช้เวลา:</strong> {{ item.during }}วัน</small>
+			
+			<!-- ref -->
+			<br>
+			<small ng-show="item.ref!=''"><strong>สั่งโดย:</strong> {{ item.ref }}</small>
+			
+			<!-- comment -->
+			<ul class="comment list-unstyled small">
+				<li ng-repeat="cm in item.comment">@{{ cm.nick }} - {{ cm.text }}</li>
+			</ul>
+
+			<!-- timeline -->
+			<ul class="timeline list-inline">
+				<li>
+					<span class="glyphicon glyphicon-ok-circle text-sub tl-1" title="{{ item.create }}"></span>
+				</li>
+				<li ng-class="{'bd-main':item.status.over=='true', 'bd-sub':item.status.clear=='true'&&item.status.over=='false'}">
+					<span ng-class="{'text-main':item.status.over=='true', 'text-sub':item.status.clear=='true'&&item.status.over=='false'}" class="glyphicon glyphicon-ok-circle tl-2" title="{{ item.plan }}"></span>
+				</li>
+				<li class="bd-sub">
+					<span class="glyphicon glyphicon-ok-circle text-sub tl-3" title="{{ item.clear }}"></span>
+				</li>
+				<li class="bd-sub">
+					<span class="glyphicon glyphicon-ok-circle text-sub tl-4" title="{{ item.approve }}"></span>
+				</li>
+			</ul>
+
+		</div>
+		<div class="panel-footer">
+
+			<!-- tag -->
+			<ul class="list-inline small">
+				<li ng-repeat="tag in item.tag">
+					<a href="#/reminder/{{ recent+'/tag/'+convURL(tag.name) }}"><span class="">#{{ tag.name }}</span></a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+
+	<p class="text-center" ng-show="taskRecent">
+		<a class="small" ng-click="taskRecent=false"><span class="glyphicon glyphicon-menu-up"></span><br>ซ่อนงานที่ผ่านมา</a>
+	</p>
+
+</div>

@@ -1,0 +1,122 @@
+<div class="tab">
+	<h2 class="text-main pull-left">ข้อมูลพนักงาน</h2>
+	<div class="btn-group pull-right" ng-show="grant.team">
+		<button type="button" class="btn btn-link">{{team.name}}</button>
+		<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+		<ul class="dropdown-menu">
+			<li class="text-center"><a ng-click="team.filters.disable = 'N'; team.name='ปัจจุบัน'">ปัจจุบัน</a></li>
+			<li class="text-center"><a ng-click="team.filters.disable = 'Y'; team.name='อดีตพนักงาน'">อดีตพนักงาน</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="panel" ng-repeat="(keyD,item) in dataTeam">
+	<div class="panel-body">
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th width="50" class="text-right hidden-xs"><span class="tag c{{ item.id }}" title="{{ item.name.th }}">{{ item.abb }}</span></th>
+					<th colspan="2">{{ item.name.en }}</th>
+					<th width="50" class="text-right hidden-xs"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(keyE,e) in item.emp" ng-show="e.disable==team.filters.disable">
+					<td class="text-right hidden-xs">{{ e.desk }}</td>
+					<td class="text-nowrap" ng-class="{'text-danger':e.disable=='Y'}">{{e.nick+' '+e.name}}<br><small>{{e.pos}}</small></td>
+					<td class="text-right"><a href="mailto:{{ e.mail }}" class="a-contact">{{e.mail}}<br><a href="tel:{{ e.phone }}" class="a-contact">{{e.phone}}</a></td>
+					<td class="text-right hidden-xs"><a data-toggle="modal" data-target="#editForm" ng-click="team.viewData(keyD,keyE)" ng-show="grant.team || me.id == e.id"><span class="glyphicon glyphicon-pencil"></span></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+
+<!-- edit -->
+<div id="editForm" class="modal fade" role="dialog" aria-labelledby="e-title">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+		
+		<fieldset ng-disabled="show">
+    	<form name="editForm" ng-submit="team.editForm()" novalidate>
+
+      		<div class="modal-header bg-fade">
+        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" id="e-title">แก้ไขข้อมูล</h4>
+      		</div>
+
+      		<div class="modal-body">
+      			<div class="row">
+            		<div class="form-group col-sm-6">
+						<label>ชื่อ</label>
+	            		<input type="text" class="form-control input-sm" value="{{team.formData.nick+' '+team.formData.name}}" disabled />
+	          		</div>
+	          		<div class="form-group col-sm-6">
+						<label>อีเมล</label>
+	            		<input type="text" class="form-control input-sm" value="{{team.formData.mail}}" disabled />
+	          		</div>
+          		</div>
+          		<div class="row" ng-show="grant.team">
+            		<div class="form-group col-sm-6">
+						<label>ทีม</label>
+						<select name="dept" ng-model="team.formData.dept" class="form-control input-sm">
+							<option ng-selected="team.formData.dept==d.id" ng-repeat="d in dataTeam" value="{{d.id}}">{{d.name.en}}</option>
+						</select>
+	          		</div>
+	          		<div class="form-group col-sm-6">
+						<label>ตำแหน่ง</label>
+            			<input type="text" class="form-control input-sm" name="pos" ng-model="team.formData.pos" required />
+	          		</div>
+          		</div>
+          		<div class="row">
+          			<div class="form-group col-sm-6">
+            			<label>โทรศัพท์</label>
+            			<input type="text" class="form-control input-sm" name="phone" maxlength="10" placeholder="...." ng-model="team.formData.phone" required />
+            		</div>
+          			<div class="form-group col-sm-6">
+            			<label>ติดต่อ <small class="text-fade">(โต๊ะทำงาน)</small></label>
+            			<input type="text" class="form-control input-sm" name="desk" min="00" max="99" maxlength="2" placeholder="...." ng-model="team.formData.desk" />
+            		</div>
+          		</div>	        		
+          		<div class="checkbox">
+					<label>
+						<input type="checkbox" ng-model="team.changeInput" ng-click="team.formData.pass=''">
+						เปลี่ยนรหัสผ่าน
+					</label>
+					<br>
+					<input type="password" class="form-control input-sm" name="pass" maxlength="20" ng-model="team.formData.pass" ng-show="team.changeInput" />
+          		</div>
+          		<div class="checkbox" ng-show="grant.team">
+					<label>
+						<input type="checkbox" ng-model="team.formData.lead" ng-checked="team.formData.lead">
+						หัวหน้าทีม
+					</label>
+				</div>
+				<div class="checkbox" ng-show="grant.team">
+					<label>
+						<input type="checkbox" ng-model="team.formData.leave" ng-checked="team.formData.leave">
+						ลาออก
+					</label>
+				</div>
+      		</div>
+
+			<div class="modal-footer">
+				
+				<!-- message -->
+				<div class="pull-left" ng-class="{'text-danger':!success}" ng-show="show">
+					<img src="lib/img/loader.gif" />
+					<small >{{ message }}</small>
+				</div>
+
+				<button type="submit" class="btn btn-main" ng-disabled="editForm.$invalid">แก้ไขและบันทึก</button>
+
+			</div>
+
+		</form>
+		</fieldset>
+
+    	</div>
+  	</div>
+</div>

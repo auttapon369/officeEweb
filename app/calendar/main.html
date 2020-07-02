@@ -1,0 +1,110 @@
+<div class="tab">
+	<h2 class="pull-left">{{ month_th }}</h2>
+	<div class="pull-right">
+  		<a href="#/?date={{ca.prev}}" class="btn btn-link btn-lg"><span class="glyphicon glyphicon-menu-left"></span></a>
+  		<a href="#/?date={{ca.next}}" class="btn btn-link btn-lg"><span class="glyphicon glyphicon-menu-right"></span></a>
+	</div>
+</div>
+
+<div id="calendar">
+	<ul class="cld-head list-inline">
+		<li class="text-danger">อา</li>
+		<li>จ</li>
+		<li>อ</li>
+		<li>พ</li>
+		<li>พฤ</li>
+		<li>ศ</li>
+		<li>ส</li>
+	</ul>
+	<ul class="cld-day list-inline">
+		<li ng-repeat="d in calendar" ng-class="{'bg-fade':d.holiday.length || d.day==''}">
+
+			<!-- days -->
+			<div ng-show="d.day!=''">
+				<h5 ng-class="{'bg-main text-white':d.today=='true'}">{{d.day}}</h5>
+				<ul class="cld-data list-unstyled">
+					<li><span class="hidden-xs">{{d.holiday[0].detail}}</span></li>
+					<li><a ng-click="ca.keep(d.appoint)" ng-show="d.appoint.length > 0" data-toggle="modal" data-target="#e-modal"><span class="cld-point bg-info">{{ d.appoint.length }}</span></a></li>
+					<li><a ng-click="ca.keep(d.absence)" ng-show="d.absence.length > 0" data-toggle="modal" data-target="#e-modal"><span class="cld-abs bg-danger">{{ d.absence.length }}</span></a></li>
+				</ul>
+				<button class="btn btn-link" data-toggle="modal" data-target="#r-modal" ng-click="ca.viewData(d.weekly,d.day,d.weekly.results.id)" ng-hide="d.weekly.status=='0' || grant.noWeekly">
+					<span ng-show="d.weekly.status == '1'" class="glyphicon glyphicon-pencil small text-fade"></span>
+					<span ng-show="d.weekly.status == 'N'" class="glyphicon glyphicon-file small"></span>
+					<span ng-show="d.weekly.status == 'Y'" class="glyphicon glyphicon-ok small text-sub"></span>
+				</button>
+			</div>
+
+		</li>
+	</ul>
+</div>
+
+
+<!-- event -->
+<div id="e-modal" class="modal fade" role="dialog" aria-labelledby="e-title">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header bg-fade">
+        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" id="e-title">Message</h4>
+      		</div>
+      		<div class="modal-body">
+      			<ul class="list-unstyled">
+      				<li ng-repeat="a in ca.event"><span class="h5 text-main">@{{a.nick}}</span>{{ " " + a.type + ", " + a.detail }}</li>
+      			</ul>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
+
+<!-- report -->
+<div id="r-modal" class="modal fade" role="dialog" aria-labelledby="r-title">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+		
+		<fieldset ng-disabled="show">
+    	<form name="dataForm" novaldation>
+
+      		<div class="modal-header bg-fade">
+        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" id="r-title">Weekly</h4>
+      		</div>
+      		<div class="modal-body">
+	        	<form>
+	          		<div class="form-group" ng-class="{'has-error':dataForm.detail.$invalid && !dataForm.detail.$pristine}">
+	            		<label>หัวเรื่อง/ รายละเอียดของงาน</label>
+	            		<textarea class="form-control" name="detail" ng-model="ca.formData.detail" required></textarea>
+	          		</div>
+	          		<div class="form-group">
+	            		<label>อุปสรรค/ ปัญหา</label>
+	            		<textarea class="form-control" ng-model="ca.formData.trouble"></textarea>
+	          		</div>
+	          		<div class="form-group" ng-class="{'has-error':dataForm.result.$invalid && !dataForm.result.$pristine}">
+	            		<label>ผลการปฏิบัติงาน/ หมายเหตุ</label>
+	            		<textarea class="form-control" name="result" ng-model="ca.formData.result" required></textarea>
+	          		</div>				          		
+	          		<div class="form-group" ng-class="{'has-error':dataForm.place.$invalid && !dataForm.place.$pristine}">
+	            		<label>สถานที่ปฏิบัติงาน</label>
+	            		<input type="text" class="form-control" name="place" ng-model="ca.formData.place" required />
+	          		</div>
+	          	</form>
+      		</div>
+			<div class="modal-footer">
+				
+				<!-- alert -->
+				<div class="pull-left" ng-class="{'text-danger':!success}" ng-show="show">
+					<img src="lib/img/loader.gif" />
+					<small >{{message}}</small>
+				</div>
+
+				<button type="button" class="btn btn-main" ng-click="ca.add()" ng-disabled="dataForm.$invalid" ng-show="ca.formStatus==1">บันทึก</button>
+				<button type="button" class="btn btn-sub" ng-click="ca.edit()" ng-disabled="dataForm.$invalid" ng-show="ca.formStatus=='N'">แก้ไข</button>
+
+			</div>
+    	</div>
+
+	</form>
+	</fieldset>
+
+  	</div>
+</div>

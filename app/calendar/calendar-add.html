@@ -1,0 +1,64 @@
+<div class="tab">
+	<h2 class="pull-left">{{new.title}}</h2>
+	<div class="pull-right">
+		<a class="btn btn-link" ng-href="#/add">ออก <span class="glyphicon glyphicon-arrow-right"></span></a>
+	</div>
+</div>
+<br><br>
+<fieldset ng-disabled="show">
+<form name="addForm" class="row" ng-submit="new.processForm()">	
+	<div class="col-sm-6 col-sm-offset-3">
+		<div id="alert" class="alert" ng-class="{'alert-success':success, 'alert-danger':!success}" ng-show="show">{{message}}</div>
+		<div id="inp-team" class="form-group" ng-hide="new.add=='holiday'" ng-class="{'has-error':new.teamError}">
+			<label>ทีมงาน</label>
+			<select name="team" ng-model="new.formData.team" class="form-control">
+				<optgroup label="{{team.name.en}}" ng-repeat="team in dataTeam">
+					<option ng-repeat="m in team.emp | filter:{disable:'N'}" ng-value="{{m.id}}">{{m.nick+' '+m.name}}</option>
+				</optgroup>
+			</select>
+			<span ng-show="new.teamError" class="help-block">** เลือกทีมงาน</span>
+		</div>
+		<div class="form-group" ng-show="new.add=='abs'">
+			<label>ประเภท</label></br>
+			<label class="radio-inline">
+	        	<input type="radio" id="dr1" ng-model="new.formData.type" name="type" ng-value="3" ng-checked="true">ลาป่วย
+			</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr2" ng-model="new.formData.type" name="type" ng-value="4">ลากิจ
+	      	</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr3" ng-model="new.formData.type" name="type" ng-value="5">ลาพักร้อน
+	     	</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr4" ng-model="new.formData.type" name="type" ng-value="6">มาสาย
+	      	</label> 
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr5" ng-model="new.formData.type" name="type" ng-value="7">ขาดงาน
+	      	</label>   	                 
+	    </div>
+	    <div class="form-group" ng-show="new.add=='holiday'">
+			<label>ประเภท</label></br>
+			<label class="radio-inline">
+	        	<input type="radio" id="r6" ng-model="new.formData.type" name="type2" ng-value="1" ng-checked="true">วันหยุด
+			</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="r7" ng-model="new.formData.type" name="type2" ng-value="2">5ส.
+	      	</label> 	                 
+	    </div>
+		<div class="form-group" ng-class="{'has-error':addForm.detail.$invalid && !addForm.detail.$pristine }">
+			<label>รายละเอียด</label>
+			<textarea id="inp-detail" ng-model="new.formData.detail" name="detail" class="form-control bd-fade" placeholder="..." required></textarea>
+			<span class="help-block" ng-show="addForm.detail.$invalid && !addForm.detail.$pristine">กรุณากรอกรายละเอียด!!</span>
+		</div>
+		<div class="form-group" ng-class="{'has-error':new.dateError}">
+			<label id="inp-date">วันที่</label>
+			<input type="hidden" ng-model="new.formData.date" name="date" />
+			<div class="picker"></div>
+			<span ng-show="new.dateError" class="help-block">** เลือกวันที่</span>
+		</div>
+		<div class="clearfix"></div>		
+		<button type="submit" ng-disabled="addForm.$invalid" class="btn btn-block btn-lg btn-main">บันทึกข้อมูล</button>
+	</div>
+</form>
+</fieldset>
+<br><br><br><br>

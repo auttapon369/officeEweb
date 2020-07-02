@@ -1,0 +1,79 @@
+<div class="tab">
+	<h2 class="pull-left">เพิ่มงานใหม่</h2>
+	<div class="pull-right">
+		<a class="btn btn-link" ng-href="#/reminder">ออก <span class="glyphicon glyphicon-arrow-right"></span></a>
+	</div>
+</div>
+
+<br><br>
+
+<form name="addForm" class="row" ng-submit="processForm()">
+	
+	<div class="col-sm-6 col-sm-offset-3">
+		
+		<div id="alert" class="alert" ng-class="{'alert-success':success, 'alert-danger':!success}" ng-show="show">
+			<p ng-show="success">{{ message }}</p>
+			<ul class="list-unstyled" ng-show="!success">
+				<li ng-repeat="list in message">{{ list }}</li>
+			</ul>
+		</div>
+
+		<div class="form-group" ng-class="{ 'has-error' : addForm.detail.$invalid && !addForm.detail.$pristine }">
+			<label for="inp-detail">รายละเอียด</label>
+			<textarea id="inp-detail" ng-model="formData.detail" name="detail" class="form-control bd-fade" placeholder="..." required></textarea>
+			<span class="help-block" ng-show="addForm.detail.$invalid && !addForm.detail.$pristine">กรุณากรอกรายละเอียด!!</span>
+		</div>
+		<div class="form-group" ng-class="{ 'has-error' : dateshow }">
+			<label id="inp-date">เสร็จภายในวันที่</label>
+			<input type="hidden" ng-model="formData.date" name="date" >
+			<div class="picker"></div>
+			<span ng-show="dateshow" class="help-block">กรุณาเลือกวันที่!!</span>
+		</div>
+		<div class="form-group">
+			<label>ใช้เวลา</label></br>
+			<label class="radio-inline">
+	        	<input type="radio" id="dr1" ng-model="formData.during" name="during" ng-value="3" ng-checked="true">น้อยกว่า 3 วัน
+			</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr2" ng-model="formData.during" name="during" ng-value="7">1 อาทิตย์
+	      	</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr3" ng-model="formData.during" name="during" ng-value="15">15 วัน
+	     	</label>
+	      	<label class="radio-inline">
+	        	<input type="radio" id="dr4" ng-model="formData.during" name="during" ng-value="30">1 เดือน
+	      	</label>                  
+	    </div>
+	    <!--
+	    <div class="form-group">
+	      <label for="exampleInputFile">File input</label>
+	      <input type="file" id="exampleInputFile">
+	      <p class="help-block">Example block-level help text here.</p>
+	    </div>
+	    -->
+		<div class="form-group" ng-class="{ 'has-error' : proshow }">
+			<label id="inp-pro">โครงการ</label></br>
+			<label class="checkbox-inline tag" ng-class="{'bg-main':ckb}" ng-repeat="item in dataProject | filter: add.proExcept"><input type="checkbox" ng-checked="formData.pro.indexOf(item.id) > -1" class="checkhide" ng-value="{{ item.id }}" ng-click="ckb = !ckb; togglePro(item.id)">{{ item.shortname }}</label>
+			<span ng-show="proshow" class="help-block">กรุณาเลือกข้อมูล!!</span>
+		</div>
+		<div class="form-group" ng-class="{ 'has-error' : empshow }">
+			<label id="inp-emp">ทีมงาน</label></br>
+			<div style="display:inline" ng-repeat="item in dataTeam">
+				<label class="checkbox-inline tag" ng-class="{'bg-main':ckb}" ng-repeat="emp in item.emp | filter: add.teamExcept"><input type="checkbox" ng-checked="formData.emp.indexOf(emp.id) > -1" class="checkhide" name="emp[]" ng-value="{{ emp.id }}" ng-click="ckb = !ckb; toggleEmp(emp.id)">{{ emp.nick }}</label>
+			</div>
+			<span ng-show="empshow" class="help-block">กรุณาเลือกข้อมูล!!</span>
+		</div>
+		<div class="form-group">
+			<label for="inp-detail">ที่มา (สั่งโดย)</label>
+			<input type="text" ng-model="formData.ref" name="ref" class="form-control" placeholder="..." />
+		</div>
+
+		<div class="clearfix"></div>
+		
+		<button type="submit" ng-disabled="addForm.$invalid" class="btn btn-block btn-lg btn-main">บันทึกและทำต่อ</button>
+
+	</div>
+
+</form>
+
+<br><br><br><br>

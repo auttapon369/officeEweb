@@ -1,0 +1,60 @@
+<div class="tab">
+	<h2 class="pull-left">Weekly <small class="text-sub">{{w.month}}</small></h2>
+	<div class="pull-right">
+		<a href="#/weekly?date={{w.prev}}" class="btn btn-link btn-lg"><span class="glyphicon glyphicon-menu-left"></span></a>
+  		<a href="#/weekly?date={{w.next}}" class="btn btn-link btn-lg"><span class="glyphicon glyphicon-menu-right"></span></a>
+	</div>
+</div>
+
+<div class="panel" ng-repeat="(k,r) in w.results">
+	<div class="panel-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>{{ r.dept }}</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 1</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 2</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 3</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 4</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 5</th>
+					<th class="text-center"><small class="hidden-xs">Week</small> 6</th> 
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="(ke,team) in r.emp">
+					<td class="text-nowrap">{{team.nick}}</td>
+					<td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,1)}}" target="_blank" title="{{team.weekly.w1.length}}" ng-show="team.weekly.w1.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w1[0].status=='Y'}"></span>
+						</a>
+					</td>
+					<td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,2)}}" target="_blank" title="{{team.weekly.w2.length}}" ng-show="team.weekly.w2.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w2[0].status=='Y'}"></span>
+						</a>
+					</td>
+					<td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,3)}}" target="_blank" title="{{team.weekly.w3.length}}" ng-show="team.weekly.w3.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w3[0].status=='Y'}"></span>
+						</a>
+					</td>
+					<td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,4)}}" target="_blank" title="{{team.weekly.w4.length}}" ng-show="team.weekly.w4.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w4[0].status=='Y'}"></span>
+						</a>
+					</td>
+					<td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,5)}}" target="_blank" title="{{team.weekly.w5.length}}" ng-show="team.weekly.w5.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w5[0].status=='Y'}"></span>
+						</a>
+					</td>
+						 <td class="text-center">
+						<a ng-href="{{w.url(k,ke,team.name,team.pos,r.dept,r.abb,w.date,6)}}" target="_blank" title="{{team.weekly.w6.length}}" ng-show="team.weekly.w6.length">
+							<span class="glyphicon glyphicon-file" ng-class="{'text-sub':team.weekly.w6[0].status=='Y'}"></span>
+						</a>
+					</td> 
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

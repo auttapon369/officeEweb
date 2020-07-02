@@ -1,0 +1,23 @@
+<div class="tab">
+	<ol class="list-inline pull-left">
+		<li class="hidden-xs active"><a><h4>customer</h4></a></li>
+	</ol>
+</div>
+
+<div class="scroll">{{ message }}</div>
+
+<script>
+$(document).ready
+(
+	function()
+	{
+		// scroll
+		$('.scroll').mCustomScrollbar
+		(
+			{
+				theme: "minimal-dark"
+			}
+		);
+	}
+);
+</script>

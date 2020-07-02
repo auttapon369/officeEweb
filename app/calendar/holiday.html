@@ -1,0 +1,33 @@
+<div class="tab">
+	<h2 class="text-main pull-left">ปฏิทิน {{recent}}</h2>
+	<div class="btn-group pull-right">
+		<button type="button" class="btn btn-link">{{recent}}</button>
+		<button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button>
+		<ul class="dropdown-menu">
+			<li class="text-center" ng-repeat="v in years"><a ng-click="changeYear(v.year,'holiday')">ปฏิทิน {{ v.year }}</a></li>
+		</ul>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-7">
+		<div class="panel">
+			<div class="panel-body">
+				<h3>วันหยุด</h3>
+				<ul class="list-unstyled">
+					<li ng-class="{'text-fade s':hol.pastDate(item.date)}" ng-repeat="item in hol.results | filter: 'วันหยุด'">{{item.detail}} <span class="pull-right">{{item.date | date: 'd/M/yyyy'}}</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-5">
+		<div class="panel">
+			<div class="panel-body">
+				<h3>5ส.</h3>
+				<ul class="list-unstyled">
+					<li ng-class="{'text-fade s':hol.pastDate(item.date)}" ng-repeat="item in hol.results | filter: '5 ส'">{{item.detail}} <span class="pull-right">{{item.date | date: 'd/M/yyyy'}}</span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

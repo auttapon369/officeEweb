@@ -1,0 +1,25 @@
+<!--<div class="modal fade" role="dialog" aria-labelledby="p-title">-->
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+      		<div class="modal-header bg-fade">
+        		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" id="p-title">{{viewAbs.title}}</h4>
+      		</div>
+      		<div class="modal-body modal-scroll">
+				<dl class="" ng-repeat="item in viewAbs.data">
+					<dt class="small" ng-show="viewAbs.left=='Y'">
+						{{item.date | date:'d/M/yyyy'}} 
+						<span class="text-danger" ng-show="item.left==0">วันนี้</span>
+						<span class="text-danger" ng-show="item.left==1">พรุ่งนี้</span>
+						<span class="text-danger" ng-show="item.left<0">ผ่านมาแล้ว {{item.left | abs}} วัน</span>
+						<span class="text-sub" ng-show="item.left>1 && item.left<30">อีก {{item.left}} วัน</span>
+					</dt>
+					<dd>{{item.detail}}</dd>
+				</dl>
+      		</div>
+			<div class="modal-footer" ng-show="viewAbs.link">
+        		<a class="btn btn-sm btn-sub" href="{{viewAbs.link}}">ดูต่อ</a>
+      		</div>
+		</div>
+	</div>
+<!--</div>-->
